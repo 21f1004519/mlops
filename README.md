@@ -187,3 +187,37 @@ DVC ensures large files are not stored in Git, only in cloud remote.
 - Gained hands-on experience in reproducible ML workflows, which is critical in MLOps pipelines.
 
 ---
+Assignment 3 - Week 3 - MLOps course
+
+Student ID: 21f1004519
+Term: MAY 2025  
+
+Assignment Objective:
+Integrate **Feast** feature store with the Iris dataset to enable consistent offline and online feature access for model training and inference.
+
+
+### Files Included
+| File                               | Description |
+|------------------------------------|--------------|
+| `feature_repo/feature_store.yaml`  | Feast configuration for offline and online stores (SQLite) |
+| `feature_repo/features.py`         | Entity and Feature definitions for the Iris dataset |
+| `train.py`             | Loads historical features from Feast, trains RandomForest model |
+| `inference.py`         | Fetches features from online store and performs predictions |
+| `data/iris_data_adapted_for_feast.csv` | Input dataset adapted for Feast |
+| `models/iris_model_feast.joblib`   | Trained model |
+
+---
+
+### Steps to Run
+# 1. Initialize Feast
+cd feature_repo
+feast apply
+
+# 2. Go back to root
+cd ..
+
+# 3. Train model using offline features
+python train.py
+
+# 4. Fetch features & run inference
+python inference.py
