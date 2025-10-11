@@ -1,9 +1,13 @@
 project: iris_project
-registry: data/registry.db
-provider: local
+registry: gs://week3-mlops/data/registry.db
+provider: gcp
 offline_store:
-  type: sqlite
-  path: data/offline_store.db
+  type: bigquery
+  dataset: iris_week3ga
+  project_id: heroic-throne-473405-m8
+  location: us-central1
+
+
 online_store:
   type: sqlite
   path: data/online_store.db

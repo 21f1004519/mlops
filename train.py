@@ -13,7 +13,7 @@ training_df = store.get_historical_features(
         "iris_id": [1001, 1002, 1003],
         "event_timestamp": pd.Timestamp.now(),
     }),
-    feature_refs=[
+    features=[
         "iris_features:sepal_length",
         "iris_features:sepal_width",
         "iris_features:petal_length",
