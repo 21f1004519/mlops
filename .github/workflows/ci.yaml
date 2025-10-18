@@ -53,8 +53,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
           dvc pull
-          ls data/
-
+          
       - name: Run tests
         run: pytest --maxfail=1 --disable-warnings -q
 

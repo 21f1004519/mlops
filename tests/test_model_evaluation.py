@@ -9,7 +9,7 @@ def test_model_accuracy():
     y = df["species"]
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    model = joblib.load("models/iris_model.joblib")
+    model = joblib.load("model.joblib")
 
     preds = model.predict(X_test)
     acc = accuracy_score(y_test, preds)
