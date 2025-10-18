@@ -9,7 +9,7 @@ import joblib
 import time
 from datetime import datetime
 
-DATA_VERSION = "v2"  # change to "raw", "v1", or "v2"
+DATA_VERSION = "raw"  # change to "raw", "v1", or "v2"
 PROJECT_ID = "heroic-throne-473405-m8"
 LOCATION = "us-central1"
 BUCKET_URI = f"gs://heroic-throne-473405-m8-week1ga"
@@ -35,4 +35,4 @@ timestamp = int(time.time())
 # Convert to readable string (YYYY-MM-DD_HH-MM-SS)
 timestamp_str = datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d_%H-%M-%S")
 
-joblib.dump(mod_dt, "model_v2.joblib")
+joblib.dump(mod_dt, "model.joblib")

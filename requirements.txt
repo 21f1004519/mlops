@@ -1,0 +1,8 @@
+dvc[gdrive]
+pandas
+pytest
+joblib
+cml
+numpy
+scikit-learn
+google-cloud-storage
