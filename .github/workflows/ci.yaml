@@ -36,6 +36,14 @@ jobs:
          with:
            node-version: '22'
 
+      -  name: Cache npm packages
+         uses: actions/cache@v4
+         with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install CML
         run: npm install -g @dvcorg/cml
 
@@ -68,3 +76,4 @@ jobs:
           cat result.txt >> report.md
           echo "\`\`\`" >> report.md
           cml comment create report.md
+
