@@ -59,7 +59,7 @@ jobs:
 
       - name: Post results as comment
         env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           pytest --maxfail=1 --disable-warnings -q > result.txt
           cat result.txt
@@ -68,15 +68,3 @@ jobs:
           cat result.txt >> report.md
           echo "\`\`\`" >> report.md
           cml comment create report.md
-
-
-
-
-
-
-
-
-
-
-
-
