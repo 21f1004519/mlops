@@ -61,11 +61,18 @@ jobs:
           TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
           gsutil cp model.joblib gs://heroic-throne-473405-m8-week1ga/models/model_${TIMESTAMP}.joblib
           
-      # - name: Pull data & model from DVC
-      #   env:
-      #     GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
-      #   run: |
-      #     dvc pull
+      - name: Update DVC with latest trained model
+        run: |
+          dvc add model.joblib
+          git add model.joblib.dvc
+          git commit -m "Auto: updated model from CI" || echo "No changes to commit"
+          dvc push
+      
+      - name: Pull data & model from DVC
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
+        run: |
+          dvc pull
           
       - name: Run tests
         run: pytest --maxfail=1 --disable-warnings -q
@@ -81,3 +88,4 @@ jobs:
           cat result.txt >> report.md
           echo "\`\`\`" >> report.md
           cml comment create report.md
+
