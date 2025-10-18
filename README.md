@@ -185,5 +185,4 @@ DVC ensures large files are not stored in Git, only in cloud remote.
 - Learned to connect DVC with cloud storage (GCS) for scalable storage.
 - Learned to traverse between data/model versions effortlessly with dvc checkout.
 - Gained hands-on experience in reproducible ML workflows, which is critical in MLOps pipelines.
-
 ---
