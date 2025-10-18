@@ -48,6 +48,8 @@ jobs:
           gcloud config set project heroic-throne-473405-m8
           export GOOGLE_APPLICATION_CREDENTIALS="gcp-key.json"       
       - name: Pull data & model from DVC
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
           dvc pull
           ls data/
@@ -67,6 +69,7 @@ jobs:
           cat result.txt >> report.md
           echo "\`\`\`" >> report.md
           cml comment create report.md
+
 
 
 
