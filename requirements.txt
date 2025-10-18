@@ -1,8 +1,8 @@
-dvc[gdrive]
-pandas
-pytest
-joblib
-cml
-numpy
-scikit-learn
-google-cloud-storage
+dvc[gdrive]==3.63.0
+pandas==2.2.3
+numpy==1.26.4
+scikit-learn==1.5.2
+pytest==8.3.3
+joblib==1.4.2
+google-cloud-storage==2.18.2
+cml==0.9.2
