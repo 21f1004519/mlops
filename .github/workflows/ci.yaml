@@ -21,7 +21,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Pull data & model from DVC
@@ -44,3 +43,4 @@ jobs:
           cat result.txt >> report.md
           echo "\`\`\`" >> report.md
           cml comment create report.md
+
