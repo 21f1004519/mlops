@@ -46,7 +46,7 @@ jobs:
           echo "$GCP_SERVICE_ACCOUNT_KEY" > gcp-key.json
           gcloud auth activate-service-account --key-file=gcp-key.json
           gcloud config set project heroic-throne-473405-m8
-          export GOOGLE_APPLICATION_CREDENTIALS="gcp-key.json       
+          export GOOGLE_APPLICATION_CREDENTIALS="gcp-key.json"       
       - name: Pull data & model from DVC
         run: |
           dvc pull
@@ -67,6 +67,7 @@ jobs:
           cat result.txt >> report.md
           echo "\`\`\`" >> report.md
           cml comment create report.md
+
 
 
 
