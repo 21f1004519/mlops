@@ -36,14 +36,6 @@ jobs:
          with:
            node-version: '22'
 
-      -  name: Cache npm packages
-         uses: actions/cache@v4
-         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Install CML
         run: npm install -g @dvcorg/cml
 
@@ -55,12 +47,25 @@ jobs:
           gcloud auth activate-service-account --key-file=gcp-key.json
           gcloud config set project heroic-throne-473405-m8
           export GOOGLE_APPLICATION_CREDENTIALS="gcp-key.json"
-          
-      - name: Pull data & model from DVC
+
+      - name: Train model
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
-          dvc pull
+          python train.py
+
+      - name: Upload trained model to GCS
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+          gsutil cp model.joblib gs://heroic-throne-473405-m8-week1ga/models/model_${TIMESTAMP}.joblib
+          
+      # - name: Pull data & model from DVC
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
+      #   run: |
+      #     dvc pull
           
       - name: Run tests
         run: pytest --maxfail=1 --disable-warnings -q
@@ -71,9 +76,8 @@ jobs:
         run: |
           pytest --maxfail=1 --disable-warnings -q > result.txt
           cat result.txt
-          echo "### ✅ CI Test Report" > report.md
+          echo "### CI Test Report" > report.md
           echo "\`\`\`" >> report.md
           cat result.txt >> report.md
           echo "\`\`\`" >> report.md
           cml comment create report.md
-
