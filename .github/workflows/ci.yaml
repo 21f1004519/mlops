@@ -23,7 +23,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install dvc[gdrive] pytest scikit-learn joblib cml pandas
 
       - name: Pull data & model from DVC
         run: |
