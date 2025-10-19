@@ -2,7 +2,6 @@ Assignment 1 – Week 1 – MLOps Course
 
 Student ID: 21f1004519
 Term: MAY 2025  
-
 Assignment Objective:
 Setting up the ML pipeline for the Iris Classifier in Google Cloud Platform (GCP) using Vertex AI and Google Cloud Storage (GCS).
 
@@ -186,3 +185,4 @@ DVC ensures large files are not stored in Git, only in cloud remote.
 - Learned to traverse between data/model versions effortlessly with dvc checkout.
 - Gained hands-on experience in reproducible ML workflows, which is critical in MLOps pipelines.
 ---
+
