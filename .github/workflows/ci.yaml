@@ -51,8 +51,7 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
-          dvc pull data
-          ls -R data/
+          dvc pull
 
       - name: Configure MLflow Tracking
         env:
@@ -113,3 +112,4 @@ jobs:
           echo "\`\`\`" >> report.md
 
           cml comment create report.md
+
