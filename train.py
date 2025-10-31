@@ -48,6 +48,8 @@ from datetime import datetime
 
 # MLflow experiment name
 # mlflow.set_tracking_uri("file:./mlruns")  # local tracking URI
+mlflow.set_tracking_uri("http://34.10.27.138:5000")
+print("Current MLflow tracking URI:", mlflow.get_tracking_uri())
 mlflow.set_experiment("iris_decision_tree")
 
 # GCS details
@@ -85,3 +87,4 @@ for max_depth in [2, 3, 4, 5]:
         print(f"Depth={max_depth} | Accuracy={acc:.3f}")
 
 print("All runs logged to MLflow!")
+
