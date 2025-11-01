@@ -1,12 +1,11 @@
+---
 name: Deploy to GKE
 
 on:
   workflow_run:
     workflows: ["Build and Push (to Artifact Registry)"]
-    types:
-      - completed
-    branches:
-      - week6-ga
+    types: [completed]
+    branches: [week6-ga]
 
 env:
   PROJECT_ID: heroic-throne-473405-m8
@@ -19,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Download image artifact
@@ -39,17 +38,23 @@ jobs:
         run: |
           echo "$GCP_SERVICE_ACCOUNT_KEY" > gcp-key.json
           gcloud auth activate-service-account --key-file=gcp-key.json
-          gcloud config set project ${{ env.PROJECT_ID }}
+          gcloud config set project $PROJECT_ID
           export GOOGLE_APPLICATION_CREDENTIALS="gcp-key.json"
 
-      - name: Get credentials for GKE
+      - name: Get GKE credentials
+        env:
+         GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
-          gcloud container clusters get-credentials ${{ env.CLUSTER }} --zone ${{ env.CLUSTER_ZONE }} --project ${{ env.PROJECT_ID }}
+          gcloud container clusters get-credentials $CLUSTER \
+            --zone $CLUSTER_ZONE \
+            --project $PROJECT_ID
 
       - name: Deploy to GKE
+        env:
+         GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
           echo "Deploying image: $IMAGE"
-          kubectl set image deployment/iris-fastapi iris-fastapi=$IMAGE --record || kubectl apply -f k8s/deployment.yaml
+          kubectl set image deployment/iris-fastapi iris-fastapi=$IMAGE --record || \
+            kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
-
           kubectl rollout status deployment/iris-fastapi --timeout=120s
