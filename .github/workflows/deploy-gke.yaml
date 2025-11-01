@@ -5,6 +5,8 @@ on:
     workflows: ["Build and Push (to Artifact Registry)"]
     types:
       - completed
+    branches:
+      - week6-ga
 
 env:
   PROJECT_ID: heroic-throne-473405-m8
@@ -49,4 +51,5 @@ jobs:
           echo "Deploying image: $IMAGE"
           kubectl set image deployment/iris-fastapi iris-fastapi=$IMAGE --record || kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
+
           kubectl rollout status deployment/iris-fastapi --timeout=120s
