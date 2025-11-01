@@ -70,4 +70,6 @@ jobs:
         with:
           name: image-info
           path: image-info.txt
-        run: echo "${{ steps.build.outputs.image_uri }}" > image-info.txt
+        run: | 
+          echo "${{ steps.build.outputs.image_uri }}" > image-info.txt
+
