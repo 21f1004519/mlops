@@ -36,9 +36,16 @@ jobs:
           gcloud config set project $PROJECT_ID
           export GOOGLE_APPLICATION_CREDENTIALS="gcp-key.json"
 
+      - name: Install GKE Auth Plugin
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+      
       - name: Get GKE credentials
         env:
          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
+         USE_GKE_GCLOUD_AUTH_PLUGIN: True
         run: |
           gcloud container clusters get-credentials $CLUSTER \
             --region $REGION \
@@ -53,4 +60,5 @@ jobs:
             kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
           kubectl rollout status deployment/iris-fastapi --timeout=120s
+
 
