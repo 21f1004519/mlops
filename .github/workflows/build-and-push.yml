@@ -70,11 +70,13 @@ jobs:
           echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
           echo "$IMAGE_URI" > image-info.txt
 
-      - name: Upload image metadata
-        uses: actions/upload-artifact@v4
-        with:
-          name: image-info
-          path: image-info.txt
+      - name: Commit image URI file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add latest_image.txt
+          git commit -m "Update latest image URI [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref }}
 
 
 
