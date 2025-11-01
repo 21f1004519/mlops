@@ -79,6 +79,8 @@ jobs:
       - name: Post results as comment
         env:
           REPO_TOKEN: ${{ secrets.GH_PAT }}
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
           echo "Running evaluation summary..."
           pytest --maxfail=1 --disable-warnings -q --tb=short > result.txt 2>&1
@@ -112,4 +114,5 @@ jobs:
           echo "\`\`\`" >> report.md
 
           cml comment create report.md
+
 
