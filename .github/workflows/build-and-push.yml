@@ -46,7 +46,7 @@ jobs:
 
       - name: Install dvc & pull data
         run: |
-          pip install "dvc[s3]" 
+          pip install "dvc[gs]" 
           dvc pull
 
       - name: Train model (produces artifacts/model.joblib)
@@ -71,3 +71,4 @@ jobs:
         with:
           name: image-info
           path: image-info.txt
+
