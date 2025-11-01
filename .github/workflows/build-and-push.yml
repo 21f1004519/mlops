@@ -59,6 +59,8 @@ jobs:
 
       - name: Build and Push Docker image
         id: build
+        env:
+         GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
           IMAGE_URI=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
           docker build -t $IMAGE_URI .
@@ -71,4 +73,5 @@ jobs:
         with:
           name: image-info
           path: image-info.txt
+
 
