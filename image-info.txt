@@ -1,1 +1,1 @@
-us-central1-docker.pkg.dev/heroic-throne-473405-m8/week6/iris-fastapi:1d3890bebaff8900b626b73c5fd7b3ae8fa238e2
+us-central1-docker.pkg.dev/heroic-throne-473405-m8/week6/iris-fastapi:6af199ebb1374d16881d080145fd17ebe9d3ac3c
