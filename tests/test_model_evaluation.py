@@ -4,6 +4,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
+# ✅ Ensure it uses the correct MLflow server
+mlflow.set_tracking_uri("http://34.10.27.138:5001")
+
 def test_model_accuracy():
     df = pd.read_csv("data/raw/iris.csv")
     X = df.drop("species", axis=1)

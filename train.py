@@ -43,22 +43,25 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn import metrics
 import mlflow
 import mlflow.sklearn
-from google.cloud import storage
+# from google.cloud import storage
 from datetime import datetime
 
 # MLflow experiment name
 # mlflow.set_tracking_uri("file:./mlruns")  # local tracking URI
-mlflow.set_tracking_uri("http://34.10.27.138:5000")
+mlflow.set_tracking_uri("http://34.10.27.138:5001")
 print("Current MLflow tracking URI:", mlflow.get_tracking_uri())
 mlflow.set_experiment("iris_decision_tree")
 
-# GCS details
+DATA_VERSION = "raw"  # change to "raw", "v1", or "v2"
 PROJECT_ID = "heroic-throne-473405-m8"
+LOCATION = "us-central1"
 BUCKET_URI = f"gs://heroic-throne-473405-m8-week1ga"
-data_path = f"{BUCKET_URI}/data/raw/iris.csv"
+# Load data from GCS
+data_path = f"{BUCKET_URI}/data/{DATA_VERSION}/data.csv" if DATA_VERSION != "raw" else f"{BUCKET_URI}/data/raw/iris.csv"
+data = pd.read_csv(data_path)
+print(data.head())
 
 # Load data
-data = pd.read_csv(data_path)
 train, test = train_test_split(data, test_size=0.4, stratify=data['species'], random_state=42)
 X_train = train[['sepal_length', 'sepal_width', 'petal_length', 'petal_width']]
 y_train = train['species']
@@ -67,11 +70,13 @@ y_test = test['species']
 
 # Simple hyperparameter tuning loop
 for max_depth in [2, 3, 4, 5]:
+    print(f"Training model with max_depth={max_depth}")
     with mlflow.start_run(run_name=f"dt_depth_{max_depth}"):
         model = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
         model.fit(X_train, y_train)
         preds = model.predict(X_test)
         acc = metrics.accuracy_score(y_test, preds)
+        print(f"Max Depth: {max_depth} | Accuracy: {acc:.3f}")
 
         # Log hyperparameters and metrics
         mlflow.log_param("max_depth", max_depth)

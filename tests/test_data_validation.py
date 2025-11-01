@@ -12,3 +12,4 @@ def test_data_integrity():
     # Check expected columns
     expected_cols = {"sepal_length", "sepal_width", "petal_length", "petal_width", "species"}
     assert expected_cols.issubset(df.columns), "Missing expected columns!"
+
