@@ -47,7 +47,6 @@ for max_depth in [2, 3, 4, 5]:
         # Log hyperparameters and metrics
         mlflow.log_param("max_depth", max_depth)
         mlflow.log_metric("accuracy", acc)
-        mlflow.log_param("data_version", DATA_VERSION)
 
         # Save model locally
         model_save_path = MODEL_PATH.parent / f"model_depth_{max_depth}.joblib"
