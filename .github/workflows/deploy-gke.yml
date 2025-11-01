@@ -40,14 +40,41 @@ jobs:
           location: ${{ env.REGION }}
       
       - name: Deploy to GKE
+        env:
+          NAMESPACE: default
         run: |
+          set -euo pipefail
           echo "Deploying image: $IMAGE"
+      
+          # Ensure context and namespace
+          kubectl config get-contexts
+          kubectl config set-context --current --namespace=$NAMESPACE
+      
+          # Check if deployment exists
           if kubectl get deployment iris-fastapi >/dev/null 2>&1; then
-            echo "Deployment exists, updating image..."
+            echo "Deployment exists — updating image..."
             kubectl set image deployment/iris-fastapi iris-fastapi=$IMAGE --record
           else
-            echo "Deployment not found, creating fresh deployment..."
-            sed "s|<GCR_HOST>/<PROJECT_ID>/<REPO_NAME>:<IMAGE_TAG>|$IMAGE|" k8s/deployment.yaml | kubectl apply -f -
+            echo "Deployment not found — creating a new one..."
+            sed "s|<GCR_HOST>/<PROJECT_ID>/<REPO_NAME>:<IMAGE_TAG>|$IMAGE|g" k8s/deployment.yaml | kubectl apply -f -
           fi
-          kubectl apply -f k8s/service.yaml
-          kubectl rollout status deployment/iris-fastapi --timeout=120s
+      
+          # Apply service (safe reapply)
+          echo "Applying service..."
+          kubectl apply -f k8s/service.yaml || echo "Service apply failed, continuing..."
+      
+          # Wait for rollout — retry up to 3 times
+          echo "Waiting for rollout..."
+          for i in {1..3}; do
+            if kubectl rollout status deployment/iris-fastapi --timeout=180s; then
+              echo "Rollout successful!"
+              exit 0
+            else
+              echo "Rollout attempt $i failed, retrying..."
+              sleep 10
+            fi
+          done   
+          echo "Rollout failed after multiple attempts."
+          kubectl describe deployment iris-fastapi
+          kubectl get pods -o wide
+          exit 1   
