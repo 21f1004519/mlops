@@ -56,7 +56,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           python train.py
-      
+
       - name: Build and Push Docker image
         id: build
         run: |
@@ -64,12 +64,10 @@ jobs:
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
           echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
-      
+          echo "$IMAGE_URI" > image-info.txt
+
       - name: Upload image metadata
         uses: actions/upload-artifact@v4
         with:
           name: image-info
           path: image-info.txt
-        run: | 
-          echo "${{ steps.build.outputs.image_uri }}" > image-info.txt
-
