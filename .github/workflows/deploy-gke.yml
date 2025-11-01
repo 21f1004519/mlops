@@ -27,30 +27,18 @@ jobs:
           IMAGE=$(cat image-info.txt)
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
-      - name: Authenticate to Google Cloud
-        env:
-          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-        run: |
-          echo "$GCP_SERVICE_ACCOUNT_KEY" > gcp-key.json
-          gcloud auth activate-service-account --key-file=gcp-key.json
-          gcloud config set project $PROJECT_ID
-          export GOOGLE_APPLICATION_CREDENTIALS="gcp-key.json"
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+      - name: Setup gcloud CLI
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0'
         with:
-          project_id: ${{ env.PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true
-      
-      - name: Get GKE credentials
-        env:
-         GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
-        run: |
-          gcloud container clusters get-credentials $CLUSTER \
-            --region $REGION \
-            --project $PROJECT_ID
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' 
 
+      -  name: Set up GKE credentials
+         uses: google-github-actions/get-gke-credentials@v0
+         with:
+          cluster_name: ${{ env.CLUSTER }}
+          location: ${{ env.REGION }}
+      
       - name: Deploy to GKE
         env:
          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
@@ -60,7 +48,3 @@ jobs:
             kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
           kubectl rollout status deployment/iris-fastapi --timeout=120s
-
-
-
-
