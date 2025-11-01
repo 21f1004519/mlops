@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iris-fastapi
+  labels:
+    app: iris-fastapi
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: iris-fastapi
+  template:
+    metadata:
+      labels:
+        app: iris-fastapi
+    spec:
+      containers:
+        - name: iris-fastapi
+          image: <GCR_HOST>/<PROJECT_ID>/<REPO_NAME>:<IMAGE_TAG>
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
+---
