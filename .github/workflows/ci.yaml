@@ -114,5 +114,3 @@ jobs:
           echo "\`\`\`" >> report.md
 
           cml comment create report.md
-
-
