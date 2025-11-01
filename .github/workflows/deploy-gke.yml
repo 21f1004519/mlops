@@ -10,7 +10,7 @@ on:
 env:
   PROJECT_ID: heroic-throne-473405-m8
   CLUSTER: week6-cluster
-  CLUSTER_ZONE: us-central1-a
+  REGION: us-central1
 
 jobs:
   deploy:
@@ -41,7 +41,7 @@ jobs:
          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
           gcloud container clusters get-credentials $CLUSTER \
-            --zone $CLUSTER_ZONE \
+            --region $REGION \
             --project $PROJECT_ID
 
       - name: Deploy to GKE
@@ -53,3 +53,4 @@ jobs:
             kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
           kubectl rollout status deployment/iris-fastapi --timeout=120s
+
