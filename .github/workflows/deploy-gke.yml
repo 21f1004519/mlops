@@ -40,11 +40,14 @@ jobs:
           location: ${{ env.REGION }}
       
       - name: Deploy to GKE
-        env:
-         GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
           echo "Deploying image: $IMAGE"
-          kubectl set image deployment/iris-fastapi iris-fastapi=$IMAGE --record || \
-            kubectl apply -f k8s/deployment.yaml
+          if kubectl get deployment iris-fastapi >/dev/null 2>&1; then
+            echo "Deployment exists, updating image..."
+            kubectl set image deployment/iris-fastapi iris-fastapi=$IMAGE --record
+          else
+            echo "Deployment not found, creating fresh deployment..."
+            sed "s|<GCR_HOST>/<PROJECT_ID>/<REPO_NAME>:<IMAGE_TAG>|$IMAGE|" k8s/deployment.yaml | kubectl apply -f -
+          fi
           kubectl apply -f k8s/service.yaml
           kubectl rollout status deployment/iris-fastapi --timeout=120s
