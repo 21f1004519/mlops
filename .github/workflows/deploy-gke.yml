@@ -83,7 +83,7 @@ jobs:
         run: |
           echo "Waiting for external IP allocation..."
           for i in {1..20}; do
-            EXTERNAL_IP=$(kubectl get svc iris-fastapi -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            EXTERNAL_IP=$(kubectl get svc iris-fastapi-svc -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
             if [ -n "$EXTERNAL_IP" ]; then
               echo "Service available at: http://$EXTERNAL_IP:8080"
               echo "EXTERNAL_IP=$EXTERNAL_IP" >> $GITHUB_ENV
@@ -127,3 +127,4 @@ jobs:
 
           echo "--- WRK RESULTS (Single Pod) ---"
           cat wrk_output_singlepod.txt
+
