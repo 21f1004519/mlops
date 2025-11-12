@@ -5,7 +5,7 @@ metadata:
   labels:
     app: iris-fastapi
 spec:
-  replicas: 2
+  replicas: 1  # Start with 1, HPA will scale automatically
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -37,4 +37,10 @@ spec:
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 30
----            
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
