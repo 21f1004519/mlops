@@ -4,7 +4,7 @@ permissions:
   contents: write
 on:
   push:
-    branches: [ week6-ga ]
+    branches: [ week7-ga ]
     paths-ignore:
       - 'image_info.txt'
   workflow_dispatch:
@@ -81,3 +81,4 @@ jobs:
           git add image-info.txt
           git commit -m "Update latest image URI [skip ci]" || echo "No changes to commit"
           git push origin HEAD:${{ github.ref }}
+
