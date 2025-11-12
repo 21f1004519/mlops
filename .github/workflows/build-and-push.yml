@@ -12,7 +12,7 @@ on:
 env:
   PROJECT_ID: heroic-throne-473405-m8
   REGION: us-central1
-  REPOSITORY: week6  # Artifact Registry repo name
+  REPOSITORY: week7  # Artifact Registry repo name
   IMAGE: iris-fastapi
 
 jobs:
@@ -81,4 +81,5 @@ jobs:
           git add image-info.txt
           git commit -m "Update latest image URI [skip ci]" || echo "No changes to commit"
           git push origin HEAD:${{ github.ref }}
+
 
