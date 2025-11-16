@@ -28,15 +28,26 @@ POISON_LEVELS = [0, 0.05, 0.10, 0.50]  # 0% baseline, 5%, 10%, 50%
 
 def poison_data(df, poison_ratio):
     df = df.copy()
-    n = int(len(df) * poison_ratio)
-    idx = np.random.choice(df.index, size=n, replace=False)
 
-    # Inject random noise from uniform distribution (feature attack)
-    df.loc[idx, ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']] = np.random.uniform(
-        low=df.min().min(), 
-        high=df.max().max(), 
-        size=(n, 4)
+    # Identify numeric columns only
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+
+    # Number of samples to poison
+    n_poison = int(len(df) * poison_ratio)
+
+    # Randomly pick rows to poison
+    poison_indices = np.random.choice(df.index, n_poison, replace=False)
+
+    # Generate random noise values in the same numeric range
+    df.loc[poison_indices, numeric_cols] = np.random.uniform(
+        low=df[numeric_cols].min().min(),
+        high=df[numeric_cols].max().max(),
+        size=(n_poison, len(numeric_cols))
     )
+
+    df.loc[poison_indices, 'poisoned'] = True
+    df['poisoned'] = df['poisoned'].fillna(False)
+    
     return df
 
 for poison_ratio in POISON_LEVELS:
